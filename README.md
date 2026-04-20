@@ -6,7 +6,7 @@ Built for VoltStream Energy Solutions, a municipal EV charging network operator 
 
 ---
 
-![VoltStream Architecture](docs/architecture.png)
+<img width="1274" height="428" alt="image" src="https://github.com/user-attachments/assets/44b026f8-f86a-4c23-9bd5-fd5a03cebb11" />
 
 ---
 
@@ -21,6 +21,8 @@ An automated data pipeline that runs daily, correlating EV station operational s
 ---
 
 ## Key Findings
+
+<img width="824" height="643" alt="final_dashboard" src="https://github.com/user-attachments/assets/b5ea988b-fe39-4ac8-a202-8dd036f55cb0" />
 
 - **$231,875** estimated hourly revenue at risk across the monitored station network
 - **Rain** produces the highest average risk score (~27/100) across all weather conditions
