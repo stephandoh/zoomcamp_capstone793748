@@ -22,6 +22,12 @@ An automated data pipeline that runs daily, correlating EV station operational s
 
 ## Key Findings
 
+<img width="699" height="685" alt="metabse redshift" src="https://github.com/user-attachments/assets/a3dfe62b-298e-40fe-a17d-58b6ed4f95b3" />
+
+<img width="1259" height="695" alt="metabase2" src="https://github.com/user-attachments/assets/7c163a32-2738-4623-916b-8bf9e46e00b6" />
+
+<img width="1269" height="687" alt="addquestionsmetabase" src="https://github.com/user-attachments/assets/fdaa6df8-7de0-4095-a93b-3717e0807c88" />
+
 <img width="824" height="643" alt="final_dashboard" src="https://github.com/user-attachments/assets/b5ea988b-fe39-4ac8-a202-8dd036f55cb0" />
 
 - **$231,875** estimated hourly revenue at risk across the monitored station network
