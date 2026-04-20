@@ -1,0 +1,14 @@
+# API requests
+requests==2.32.3
+
+# AWS
+boto3==1.35.0
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Data processing
+pandas==2.2.2
+
+# Type hints support (Python 3.12)
+typing-extensions==4.12.2

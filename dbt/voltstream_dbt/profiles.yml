@@ -1,0 +1,16 @@
+voltstream_dbt:
+  outputs:
+    dev:
+      type: redshift
+      method: database
+      host: "{{ env_var('DBT_HOST') }}"
+      port: 5439
+      dbname: "{{ env_var('DBT_DATABASE') }}"
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      schema: staging
+      threads: 4
+      connect_timeout: 30
+      is_serverless: true
+      serverless_work_group: default-workgroup
+  target: dev

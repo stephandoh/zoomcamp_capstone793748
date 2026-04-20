@@ -1,0 +1,91 @@
+version: 2
+
+models:
+  - name: dim_station
+    description: >
+      Station dimension table. One row per charging station.
+      Contains static descriptive attributes — location, operator,
+      address. Does not contain connection-level detail.
+    columns:
+      - name: station_id
+        description: Natural key — unique identifier from Open Charge Map
+        tests:
+          - not_null
+          - unique
+
+      - name: latitude
+        description: Station latitude
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Station longitude
+        tests:
+          - not_null
+
+  - name: dim_weather
+    description: >
+      Weather dimension table. One row per geographic weather zone
+      defined by lat_round + lon_round. Refreshed on every pipeline run.
+    columns:
+      - name: weather_zone_id
+        description: Surrogate key — md5 hash of lat_round + lon_round
+        tests:
+          - not_null
+          - unique
+
+      - name: temperature_f
+        description: Temperature in Fahrenheit at time of ingestion
+        tests:
+          - not_null
+
+      - name: condition
+        description: Weather condition string from OpenWeatherMap
+        tests:
+          - not_null
+
+  - name: fct_risk
+    description: >
+      Risk scoring model. One row per station + connection with
+      weather joined by zone. Contains risk score, revenue at risk,
+      and all scoring components. Source for fact_station_status.
+    columns:
+      - name: station_id
+        tests:
+          - not_null
+
+      - name: risk_score
+        description: Composite risk score 0-100
+        tests:
+          - not_null
+
+      - name: risk_band
+        description: High / Medium / Low classification
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High', 'Medium', 'Low']
+
+      - name: est_revenue_at_risk
+        description: Estimated hourly revenue loss for offline stations
+        data_tests:
+          - not_null
+
+  - name: fact_station_status
+    description: >
+      Incremental fact table. One row per station + connection per
+      pipeline run. Accumulates history over time enabling trend
+      analysis of downtime vs weather conditions.
+    columns:
+      - name: station_id
+        tests:
+          - not_null
+
+      - name: risk_score
+        tests:
+          - not_null
+
+      - name: scored_at
+        description: Timestamp when this record was scored by the pipeline
+        tests:
+          - not_null

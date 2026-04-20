@@ -1,0 +1,114 @@
+# VoltStream — Local Airflow Environment
+# =======================================
+# Runs Airflow with all required services locally via Docker Compose.
+#
+# Services:
+#   postgres    — Airflow metadata database
+#   airflow-init — one-time setup: creates DB tables + admin user
+#   webserver   — Airflow UI at http://localhost:8080
+#   scheduler   — monitors DAGs and triggers task runs
+#
+# Usage:
+#   Start:   docker-compose up -d
+#   Stop:    docker-compose down
+#   Logs:    docker-compose logs -f scheduler
+#   UI:      http://localhost:8080 (admin / admin)
+#
+# Before first run:
+#   docker-compose up airflow-init
+# Then:
+#   docker-compose up -d
+
+
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: airflow/Dockerfile
+  environment:
+
+    DBT_HOST: ${DBT_HOST}
+    DBT_DATABASE: ${DBT_DATABASE}
+    DBT_USER: ${DBT_USER}
+    DBT_PASSWORD: ${DBT_PASSWORD}
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__WEBSERVER__SECRET_KEY: voltstream-secret-key-change-in-prod
+    OPENCHARGE_API_KEY: ${OPENCHARGE_API_KEY}
+    WEATHER_API_KEY: ${WEATHER_API_KEY}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    AIRFLOW_CONN_REDSHIFT_DEFAULT: >-
+      redshift://admin:${REDSHIFT_PASSWORD}@default-workgroup.885180542073.us-east-1.redshift-serverless.amazonaws.com:5439/dev
+
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./dbt:/opt/airflow/dbt
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./logs/airflow:/opt/airflow/logs
+
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+          --username admin \
+          --password admin \
+          --firstname Voltstream \
+          --lastname Admin \
+          --role Admin \
+          --email admin@voltstream.com
+        echo "Airflow initialised successfully"
+    restart: on-failure
+
+  webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+
+  scheduler:
+    <<: *airflow-common
+    command: scheduler
+    healthcheck:
+      test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob", "--hostname", "$${HOSTNAME}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+
+volumes:
+  postgres_data:

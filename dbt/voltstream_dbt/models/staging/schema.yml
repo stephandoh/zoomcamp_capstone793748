@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: stg_ev
+    description: >
+      Cleaned and flattened EV station data from the Silver layer.
+      One row per station + connection combination.
+      Filtered to current, quality-passed records only.
+    columns:
+      - name: station_id
+        description: Unique identifier for the charging station
+        tests:
+          - not_null
+
+      - name: connection_id
+        description: Unique identifier for a connector at a station
+
+      - name: latitude
+        description: Station latitude coordinate
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Station longitude coordinate
+        tests:
+          - not_null
+
+      - name: lat_round
+        description: Latitude rounded to 1 decimal for weather zone joining
+        tests:
+          - not_null
+
+      - name: lon_round
+        description: Longitude rounded to 1 decimal for weather zone joining
+        tests:
+          - not_null
+
+      - name: power_kw
+        description: Power output of the connection in kilowatts
+
+      - name: is_operational
+        description: True if the connection status type is operational (StatusTypeID = 50)
+
+      - name: is_current
+        description: SCD Type 2 flag — true for the active version of a record
+
+  - name: stg_weather
+    description: >
+      Cleaned weather data from the Silver layer.
+      One row per geographic weather zone (lat_round + lon_round).
+    columns:
+      - name: lat_round
+        description: Zone latitude rounded to 1 decimal
+        tests:
+          - not_null
+
+      - name: lon_round
+        description: Zone longitude rounded to 1 decimal
+        tests:
+          - not_null
+
+      - name: temperature_f
+        description: Temperature in Fahrenheit — used for risk score thresholds
+        tests:
+          - not_null
+
+      - name: condition
+        description: Weather condition from OpenWeatherMap (e.g. Clear, Rain, Snow, Thunderstorm)
+        tests:
+          - not_null

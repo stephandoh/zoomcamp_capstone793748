@@ -1,0 +1,28 @@
+# Environment variables — never commit secrets
+.env
+
+# Logs
+logs/
+*.log
+
+# dbt artifacts — generated files, not source
+dbt/voltstream_dbt/target/
+dbt/voltstream_dbt/dbt_packages/
+dbt/voltstream_dbt/logs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# airflow
+logs/
+

@@ -1,0 +1,31 @@
+name: 'voltstream_dbt'
+version: '1.0.0'
+profile: 'voltstream_dbt'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  # Energy rate used for est_revenue_at_risk calculation
+  # Override at run time: dbt run --vars '{"energy_rate": 0.42}'
+  energy_rate: 0.35
+
+models:
+  voltstream_dbt:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: gold
+
+flags:
+  send_anonymous_usage_stats: false
