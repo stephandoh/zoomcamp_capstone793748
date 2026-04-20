@@ -5,8 +5,21 @@ This guide walks you through setting up all the AWS infrastructure required to r
 The services you will configure are:
 
 - **S3** — two buckets for Bronze and Silver data storage
+  <img width="2531" height="1339" alt="image" src="https://github.com/user-attachments/assets/a811c3ba-b38f-4357-8760-e649ad9636bb" />
+
 - **IAM** — a user with the correct permissions to access S3 and Redshift
+  <img width="2522" height="1336" alt="image" src="https://github.com/user-attachments/assets/879d5600-e2c9-4264-912b-60c9ed388425" />
+
+  NB: in my project the user's name is 'snowflakedvgnetflix', which sounds weird, but i chose to maintain it. It was meant for a previous project. So give your user a better name like 'admin'
+  
 - **Redshift Serverless** — the analytical warehouse where dbt models are built
+  <img width="2523" height="1334" alt="image" src="https://github.com/user-attachments/assets/b78e728f-8a59-4e60-abbc-bbc5bbf8a19d" />
+
+  <img width="2520" height="1341" alt="image" src="https://github.com/user-attachments/assets/faa597e2-c6a8-40e8-9fb1-465d4f01eccf" />
+
+  NB: Let AWS manage the password for you, else you will have to update the password in profiles.yml in dbt all the time to establish conection between dbt and redshift
+
+  <img width="2542" height="1340" alt="image" src="https://github.com/user-attachments/assets/ad1406bc-0ac2-4c1a-99ce-1d6158501a4c" />
 
 ## API Keys
 
