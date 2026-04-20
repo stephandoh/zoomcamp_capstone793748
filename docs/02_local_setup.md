@@ -159,7 +159,7 @@ print('All modules import cleanly')
 
 Airflow orchestrates the full pipeline on a daily schedule. It runs inside Docker Compose alongside a Postgres metadata database.
 
-<img width="1259" height="695" alt="metabase2" src="https://github.com/user-attachments/assets/d7bd4f62-efff-4769-9475-67019fc0861a" />
+<img width="1273" height="691" alt="image" src="https://github.com/user-attachments/assets/929403d6-9b2f-4f24-8615-534a741940c6" />
 
 ### Project structure for Airflow
 
