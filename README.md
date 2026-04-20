@@ -22,6 +22,8 @@ An automated data pipeline that runs daily, correlating EV station operational s
 
 ## Key Findings
 
+### What you see after getting the docker image for metabase.
+
 <img width="699" height="685" alt="metabse redshift" src="https://github.com/user-attachments/assets/a3dfe62b-298e-40fe-a17d-58b6ed4f95b3" />
 
 <img width="1259" height="695" alt="metabase2" src="https://github.com/user-attachments/assets/7c163a32-2738-4623-916b-8bf9e46e00b6" />
